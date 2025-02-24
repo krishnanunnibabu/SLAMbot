@@ -1,0 +1,42 @@
+Lidar
+ros2 run rplidar_ros rplidar_composition --ros-args   -p serial_port:=/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0   -p serial_baudrate:=115200   -p frame_id:=laser_frame   -p angle_compensate:=true   -p scan_mode:=Standard
+
+
+
+Motor
+ros2 run serial_motor_demo driver --ros-args -p serial_port:=/dev/ttyUSB0 -p baud_rate:=57600 -p loop_rate:=30 -p encoder_cpr:=466
+
+
+
+Joystick
+ros2 launch SLAMbot joystick.launch.py 
+
+
+
+Twist Mux
+ros2 run twist_mux twist_mux --ros-args --params-file ./dev_ws/src/SLAMbot/config/twist_mux.yaml -r cmd_vel_out:=diff_cont/cmd_vel_unstamped
+
+
+
+Slam Toolbox
+ros2 launch slam_toolbox online_async_launch.py params_file:=dev_ws/src/SLAMbot/config/mapper_params_online_async.yaml use_sim_time:=true
+
+
+
+Gazebo Simulation
+ros2 launch SLAMbot sim_rsp.launch.py world:=~/dev_ws/src/SLAMbot/world/obstacle_world.world
+
+
+
+Nav2d
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
+
+
+
+Rviz
+rviz2 config:=~/dev_ws/src/SLAMbot/config/rviz_config.rviz
+
+
+
+Motor GUI
+ros2 run serial_motor_demo gui
